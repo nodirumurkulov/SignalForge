@@ -26,7 +26,8 @@ def test_extracts_defanged_urls_hashes_ips_and_emails() -> None:
 
 
 def test_deduplicates_indicators() -> None:
-    indicators = extract_indicators("8.8.8.8 8.8.8.8 hxxp://a.example/path hxxp://a.example/path", "x")
+    text = "8.8.8.8 8.8.8.8 hxxp://a.example/path hxxp://a.example/path"
+    indicators = extract_indicators(text, "x")
 
     assert [indicator.value for indicator in indicators].count("8.8.8.8") == 1
     assert [indicator.value for indicator in indicators].count("http://a.example/path") == 1

@@ -38,7 +38,8 @@ def score_indicator(indicator: Indicator) -> Indicator:
         if "malicious" in observation.tags or "abusive" in observation.tags:
             score += 25
             explanation.append(f"{observation.provider} malicious reputation +25")
-        if "phishing-keyword" in observation.tags or "brand-or-phishing-keyword" in observation.tags:
+        phishing_tags = {"phishing-keyword", "brand-or-phishing-keyword"}
+        if phishing_tags.intersection(observation.tags):
             score += 10
             explanation.append("phishing keyword +10")
         if "low-signal" in observation.tags:

@@ -42,7 +42,7 @@ def build_clusters(indicators: list[Indicator]) -> list[CampaignCluster]:
     for key, members in grouped.items():
         if not members:
             continue
-        shared_tags = sorted(set.intersection(*(set(member.tags) for member in members))) if members else []
+        shared_tags = sorted(set.intersection(*(set(member.tags) for member in members)))
         score = max(member.score for member in members)
         if len(members) > 1:
             score = min(100, score + 10)
