@@ -4,12 +4,100 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Threat Intel Fusion Platform</title>
+    <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
-    <main>
-      <h1>Threat Intel Fusion Platform</h1>
-      <p>Paste threat-report text to extract and normalize IOCs.</p>
-      <p>API documentation is available at <a href="/docs">/docs</a>.</p>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Defensive Threat Intelligence Engineering</p>
+        <h1>Threat Intel Fusion Platform</h1>
+        <p>
+          Convert raw public threat-report text into enriched, scored, clustered, and
+          exportable analyst intelligence.
+        </p>
+      </div>
+      <nav>
+        <a href="/docs">API Docs</a>
+        <button id="refreshButton" type="button">Refresh</button>
+        <button id="clearButton" type="button" class="danger">Clear</button>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <section class="panel intake-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Report intake</h2>
+            <p>Paste a report, IOC list, or incident notes.</p>
+          </div>
+          <button id="demoButton" type="button">Load demo</button>
+        </div>
+        <label>
+          Source name
+          <input id="sourceName" value="manual-report" />
+        </label>
+        <label>
+          Threat report text
+          <textarea id="reportText" placeholder="Paste report text or IOCs here..."></textarea>
+        </label>
+        <button id="analyzeButton" type="button">Analyze and fuse intelligence</button>
+        <pre id="statusBox" class="status">Ready.</pre>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Detection exports</h2>
+            <p>Generate artifacts for detection engineering and hunting.</p>
+          </div>
+          <select id="exportFormat">
+            <option value="stix">STIX 2.1</option>
+            <option value="sigma">Sigma</option>
+            <option value="splunk">Splunk SPL</option>
+            <option value="kql">Elastic/KQL</option>
+            <option value="csv">CSV</option>
+          </select>
+        </div>
+        <button id="exportButton" type="button">Generate export</button>
+        <pre id="exportBox" class="export-box">No export generated yet.</pre>
+      </section>
+
+      <section class="panel full-width">
+        <div class="panel-heading">
+          <div>
+            <h2>Indicator workbench</h2>
+            <p>Normalized IOCs with enrichment, scoring, tags, and explainability.</p>
+          </div>
+          <div id="summaryCards" class="summary-cards"></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Value</th>
+                <th>Severity</th>
+                <th>Score</th>
+                <th>Tags</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody id="indicatorRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel full-width">
+        <div class="panel-heading">
+          <div>
+            <h2>Campaign clusters</h2>
+            <p>Related indicators grouped by infrastructure and shared context.</p>
+          </div>
+        </div>
+        <div id="clusterGrid" class="cluster-grid"></div>
+      </section>
     </main>
+
+    <script src="/static/app.js"></script>
   </body>
 </html>
