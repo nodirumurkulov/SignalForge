@@ -1,0 +1,15 @@
+Public-style threat report excerpt for local testing.
+
+Analysts observed credential-harvesting infrastructure using a login-themed URL:
+
+- hxxp://secure-login-update.example-attacker.net/session
+- c2.panel.example-attacker.net
+- 185.199.108.153
+- operator@example-attacker.net
+
+Related file indicators:
+
+- e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- 44d88612fea8a8f36de82e1278abb02f
+
+These indicators are synthetic or documentation-style examples for defensive testing.
