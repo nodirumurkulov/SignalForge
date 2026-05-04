@@ -38,6 +38,24 @@ uvicorn app.main:app --reload
 
 Open `http://127.0.0.1:8000` and paste a public threat report or IOC list.
 
+## Security notes
+
+This MVP is designed for local portfolio demos and analyst workflow experimentation. Do not expose it directly to the public internet without adding authentication, authorization, HTTPS, rate limiting, and operational monitoring.
+
+Built-in public-readiness safeguards:
+
+- no provider API keys are stored in the repo; optional keys are read from environment variables only
+- `.env`, local databases, virtual environments, and build artifacts are gitignored
+- browser security headers are applied to app responses
+- intake text, source names, and export indicator filters have size limits
+- CORS is not enabled by default
+
+Interactive API docs are enabled for local development. Disable them before deployment:
+
+```bash
+export TIFP_ENABLE_DOCS=false
+```
+
 ## Optional provider API keys
 
 The app works without third-party credentials. To enable external enrichment, copy `.env.example` to `.env` and set any available keys:

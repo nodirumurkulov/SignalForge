@@ -1,6 +1,10 @@
 from enum import StrEnum
+from typing import Annotated
 
 from pydantic import BaseModel, Field
+
+IndicatorValue = Annotated[str, Field(min_length=1, max_length=2048)]
+SourceName = Annotated[str, Field(min_length=1, max_length=128)]
 
 
 class IndicatorType(StrEnum):
@@ -22,12 +26,12 @@ class EnrichmentObservation(BaseModel):
 
 
 class Indicator(BaseModel):
-    value: str
+    value: IndicatorValue
     type: IndicatorType
-    source_names: list[str] = Field(default_factory=list)
+    source_names: list[SourceName] = Field(default_factory=list, max_length=50)
     first_seen: str
-    tags: list[str] = Field(default_factory=list)
-    enrichments: list[EnrichmentObservation] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list, max_length=50)
+    enrichments: list[EnrichmentObservation] = Field(default_factory=list, max_length=25)
     score: int = Field(default=0, ge=0, le=100)
     severity: str = "unknown"
     explanation: list[str] = Field(default_factory=list)
@@ -43,8 +47,8 @@ class CampaignCluster(BaseModel):
 
 
 class IntakeRequest(BaseModel):
-    source_name: str = Field(default="manual")
-    text: str = Field(min_length=1)
+    source_name: SourceName = "manual"
+    text: str = Field(min_length=1, max_length=100_000)
 
 
 class IntakeResponse(BaseModel):
@@ -65,7 +69,7 @@ class ExportFormat(StrEnum):
 
 class ExportRequest(BaseModel):
     format: ExportFormat
-    indicator_values: list[str] | None = None
+    indicator_values: list[IndicatorValue] | None = Field(default=None, max_length=1_000)
 
 
 class ExportResponse(BaseModel):

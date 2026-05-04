@@ -24,3 +24,26 @@ def test_api_intake_and_export() -> None:
 
     assert export_response.status_code == 200
     assert "index=*" in export_response.json()["content"]
+
+
+def test_security_headers_are_applied() -> None:
+    client = TestClient(app)
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["x-frame-options"] == "DENY"
+    assert "default-src 'self'" in response.headers["content-security-policy"]
+
+
+def test_oversized_request_body_is_rejected() -> None:
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/intake",
+        content='{"source_name":"api-test","text":"x"}',
+        headers={"Content-Type": "application/json", "Content-Length": "1000001"},
+    )
+
+    assert response.status_code == 413
