@@ -85,7 +85,22 @@ a:hover {
 }
 
 .danger {
+  border-color: rgba(255, 107, 129, 0.5);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 107, 129, 0.16),
+    rgba(255, 107, 129, 0.05)
+  );
   color: var(--danger);
+}
+
+.danger:hover {
+  border-color: var(--danger);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 .layout {
