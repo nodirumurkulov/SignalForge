@@ -5,6 +5,7 @@ const exportBox = document.querySelector("#exportBox");
 const indicatorRows = document.querySelector("#indicatorRows");
 const clusterGrid = document.querySelector("#clusterGrid");
 const summaryCards = document.querySelector("#summaryCards");
+const clearButton = document.querySelector("#clearButton");
 
 const demoReport = `Public report excerpt:
 Observed infrastructure:
@@ -156,11 +157,31 @@ document.querySelector("#exportButton").addEventListener("click", async () => {
 
 document.querySelector("#refreshButton").addEventListener("click", refresh);
 
-document.querySelector("#clearButton").addEventListener("click", async () => {
-  await requestJson("/api/indicators", { method: "DELETE" });
-  exportBox.textContent = "No export generated yet.";
-  statusBox.textContent = "Cleared local indicator database.";
-  await refresh();
+clearButton.addEventListener("click", async () => {
+  const confirmed = window.confirm(
+    "Clear all locally stored indicators? This cannot be undone.",
+  );
+  if (!confirmed) {
+    statusBox.textContent = "Clear cancelled. Local indicator database was not changed.";
+    return;
+  }
+
+  const originalLabel = clearButton.textContent;
+  clearButton.disabled = true;
+  clearButton.textContent = "Clearing...";
+  statusBox.textContent = "Clearing local indicator database...";
+
+  try {
+    await requestJson("/api/indicators", { method: "DELETE" });
+    exportBox.textContent = "No export generated yet.";
+    statusBox.textContent = "Cleared local indicator database.";
+    await refresh();
+  } catch (error) {
+    statusBox.textContent = `Error clearing indicators: ${error.message}`;
+  } finally {
+    clearButton.disabled = false;
+    clearButton.textContent = originalLabel;
+  }
 });
 
 refresh().catch((error) => {
