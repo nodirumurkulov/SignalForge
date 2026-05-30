@@ -77,6 +77,11 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.get("/api/config")
+def config() -> dict[str, str | bool | None]:
+    return {"docs_enabled": ENABLE_DOCS, "docs_url": "/docs" if ENABLE_DOCS else None}
+
+
 @app.post("/api/intake", response_model=IntakeResponse)
 async def intake(request: IntakeRequest) -> IntakeResponse:
     extracted = extract_indicators(request.text, request.source_name)
