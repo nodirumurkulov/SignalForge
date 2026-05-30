@@ -5,6 +5,7 @@ const exportBox = document.querySelector("#exportBox");
 const indicatorRows = document.querySelector("#indicatorRows");
 const clusterGrid = document.querySelector("#clusterGrid");
 const summaryCards = document.querySelector("#summaryCards");
+const apiDocsLink = document.querySelector("#apiDocsLink");
 
 const demoReport = `Public report excerpt:
 Observed infrastructure:
@@ -120,6 +121,20 @@ async function refresh() {
   renderClusters(clusterResponse.clusters);
 }
 
+async function configureApiDocsLink() {
+  try {
+    const config = await requestJson("/api/config");
+    if (config.docs_enabled && config.docs_url) {
+      apiDocsLink.href = config.docs_url;
+      apiDocsLink.hidden = false;
+      return;
+    }
+  } catch (error) {
+    console.warn("Unable to load API docs config", error);
+  }
+  apiDocsLink.hidden = true;
+}
+
 document.querySelector("#demoButton").addEventListener("click", () => {
   reportText.value = demoReport;
 });
@@ -162,6 +177,8 @@ document.querySelector("#clearButton").addEventListener("click", async () => {
   statusBox.textContent = "Cleared local indicator database.";
   await refresh();
 });
+
+configureApiDocsLink();
 
 refresh().catch((error) => {
   statusBox.textContent = `Error loading dashboard: ${error.message}`;
