@@ -1,4 +1,4 @@
-# Threat Intel Fusion Platform
+# SignalForge
 
 A defensive threat-intelligence dashboard that turns raw threat-report text into useful
 analyst output.
